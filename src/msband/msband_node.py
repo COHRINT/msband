@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-import sys, serial, argparse
+import sys, serial
 import rospy
 import time
 from sensor_msgs.msg import Imu
@@ -93,16 +93,20 @@ class ROSActions(BandDataActions):
         self.contact_pub.publish(msg)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Microsoft Band ROS node")
-    parser.add_argument("addr", help="Bluetooth device address of the band.")
+    #parser = argparse.ArgumentParser(description="Microsoft Band ROS node")
+    #parser.add_argument("addr", help="Bluetooth device address of the band.")
 
-    args = parser.parse_args()
-
-    print 'Attempting to find band at: ', args.addr
+    #args = parser.parse_args()
+    if len(sys.argv) < 2:
+        print 'Usage:', sys.argv[0], ' <band bluetooth addr>'
+        sys.exit(0)
+        
+    print 'Attempting to find band at: ', sys.argv[1]
+    bandAddr = sys.argv[1]
     
     try:
 
-        conn = BandConnection(args.addr)
+        conn = BandConnection(bandAddr)
         if not conn.hasConnection:
             print 'Unable to open channels to band'
             sys.exit(0)
